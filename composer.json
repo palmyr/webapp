@@ -2,16 +2,24 @@
     "name": "palmyr/webapp",
     "description": "Light web app",
     "type": "project",
+    "autoload": {
+        "psr-4": {
+            "Palmyr\\WebApp\\": "src/"
+        }
+    },
     "require": {
         "php": "~8.0",
         "palmyr/commonutils": "^0.0.1"
     },
+    "bin": [
+        "src/Install/Script/InstallScript.php"
+    ],
     "scripts": {
         "post-install-cmd": [
-            "Palmyr\\WebApp\\InstallScript"
+            "Palmyr\\WebApp\\Install\\Script\\InstallScript::install"
         ],
         "post-update-cmd": [
-            "Palmyr\\WebApp\\InstallScript"
+            "Palmyr\\WebApp\\Install\\Script\\InstallScript::install"
         ]
     }
 }
