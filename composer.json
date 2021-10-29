@@ -5,5 +5,13 @@
     "require": {
         "php": "~8.0",
         "palmyr/commonutils": "^0.0.1"
+    },
+    "scripts": {
+        "post-install-cmd": [
+            "Palmyr\\WebApp\\InstallScript"
+        ],
+        "post-update-cmd": [
+            "Palmyr\\WebApp\\InstallScript"
+        ]
     }
 }
