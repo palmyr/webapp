@@ -1,0 +1,50 @@
+{
+    "_readme": [
+        "This file locks the dependencies of your project to a known state",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
+        "This file is @generated automatically"
+    ],
+    "content-hash": "ea73ea21e3cc59b8d4ecadec5b4a8aa5",
+    "packages": [
+        {
+            "name": "palmyr/commonutils",
+            "version": "0.0.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/palmyr/commonutils.git",
+                "reference": "7260c392d4b20b4de65dcc3664ad87b4988ba59f"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/palmyr/commonutils/zipball/7260c392d4b20b4de65dcc3664ad87b4988ba59f",
+                "reference": "7260c392d4b20b4de65dcc3664ad87b4988ba59f",
+                "shasum": ""
+            },
+            "require": {
+                "php": "~8.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Palmyr\\Commonutils\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "description": "Usefull classes",
+            "support": {
+                "issues": "https://github.com/palmyr/commonutils/issues",
+                "source": "https://github.com/palmyr/commonutils/tree/0.0.1"
+            },
+            "time": "2021-10-22T16:30:42+00:00"
+        }
+    ],
+    "packages-dev": [],
+    "aliases": [],
+    "minimum-stability": "stable",
+    "stability-flags": [],
+    "prefer-stable": false,
+    "prefer-lowest": false,
+    "platform": [],
+    "platform-dev": [],
+    "plugin-api-version": "2.1.0"
+}
