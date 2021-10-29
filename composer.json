@@ -1,4 +1,7 @@
 {
+    "name": "palmyr/webapp",
+    "description": "Light web app",
+    "type": "project",
     "require": {
         "php": "~8.0",
         "palmyr/commonutils": "^0.0.1"
