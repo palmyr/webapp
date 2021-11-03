@@ -12,9 +12,6 @@
         "palmyr/commonutils": "^0.0.1",
         "composer/composer": "^2.1"
     },
-    "bin": [
-        "bin/install"
-    ],
     "scripts": {
         "post-install-cmd": [
             "Palmyr\\WebApp\\Install\\Script\\InstallScript::install"
