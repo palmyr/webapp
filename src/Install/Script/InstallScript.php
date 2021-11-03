@@ -23,6 +23,7 @@ class InstallScript
     {
         $publicDir = $rootDir . DIRECTORY_SEPARATOR . 'public';
         $indexTemplate = dirname(__DIR__) . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'Resources' . DIRECTORY_SEPARATOR . 'templates' . DIRECTORY_SEPARATOR . 'index.php.txt';
+        $htaccessTemplate = dirname(__DIR__) . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'Resources' . DIRECTORY_SEPARATOR . 'templates' . DIRECTORY_SEPARATOR . 'htaccess.txt';
 
         if ( !is_dir($publicDir) ) {
             if ( !mkdir($publicDir) ) {
@@ -32,6 +33,10 @@ class InstallScript
 
 
         if ( !copy($indexTemplate, $publicDir . DIRECTORY_SEPARATOR . 'index.php') ) {
+            throw new \RuntimeException('Failed to create index.php');
+        }
+
+        if ( !copy($htaccessTemplate, $publicDir . DIRECTORY_SEPARATOR . '.htaccess') ) {
             throw new \RuntimeException('Failed to create index.php');
         }
     }
