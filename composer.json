@@ -9,7 +9,7 @@
     },
     "require": {
         "php": "~8.0",
-        "palmyr/commonutils": "^0.0.1",
+        "palmyr/commonutils": "^0",
         "composer/composer": "^2.1"
     },
     "scripts": {
