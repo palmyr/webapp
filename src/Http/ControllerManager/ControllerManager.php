@@ -2,8 +2,8 @@
 
 namespace Palmyr\WebApp\Http\ControllerManager;
 
-use Palmyr\WebApp\Controller\BaseController;
-use Palmyr\WebApp\Controller\RouteNotFoundController;
+
+use Palmyr\WebApp\Http\Controller\RouteNotFoundController;
 use Palmyr\WebApp\Http\Controller\ControllerInterface;
 use Palmyr\WebApp\Http\Request\RequestInterface;
 

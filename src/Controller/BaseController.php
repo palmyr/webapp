@@ -12,6 +12,7 @@ class BaseController extends AbstractController
 
     public function get(RequestInterface $request): ResponseInterface
     {
-        return new Response('Hello world!!!');
+        $content = $this->render->render('base');
+        return new Response($content);
     }
 }

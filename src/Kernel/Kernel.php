@@ -4,9 +4,11 @@ namespace Palmyr\WebApp\Kernel;
 
 use Palmyr\WebApp\Container\Container;
 use Palmyr\WebApp\Container\ContainerInterface;
+use Palmyr\WebApp\Http\Controller\ControllerInterface;
 use Palmyr\WebApp\Http\ControllerManager\ControllerManagerInterface;
 use Palmyr\WebApp\Http\Request\RequestInterface;
 use Palmyr\WebApp\Http\Response\Response;
+use Palmyr\WebApp\Render\RenderInterface;
 
 class Kernel implements KernelInterface
 {
@@ -36,7 +38,10 @@ class Kernel implements KernelInterface
         /** @var ControllerManagerInterface $controllerManager */
         $controllerManager = $this->container->get(ControllerManagerInterface::class);
 
+        /** @var ControllerInterface $controller */
         $controller = $controllerManager->getController($request);
+
+        $controller->setRender($this->container->get(RenderInterface::class));
 
         $method = $request->getMethod();
 
