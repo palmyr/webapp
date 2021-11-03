@@ -24,7 +24,7 @@ class ControllerManager implements ControllerManagerInterface
 
         $this->controllerFinder->loadRoutes();
 
-        if ( !$controller = $this->controllerFinder->getByPath($request->getBasePath()) ) {
+        if ( !$controller = $this->controllerFinder->getByPath($request->getPathInfo()) ) {
             $controller = new RouteNotFoundController();
         }
 

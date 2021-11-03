@@ -11,5 +11,7 @@ interface RequestInterface
 
     public function getRequestUri(): string;
 
-    public function getBasePath(): string;
+    public function getPathInfo(): string;
+
+    public function getDocumentRoot(): string;
 }
