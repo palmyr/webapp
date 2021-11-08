@@ -4,6 +4,8 @@ namespace Palmyr\WebApp\Container;
 
 use Palmyr\CommonUtils\Collection\ArrayCollection;
 use Palmyr\CommonUtils\Collection\Collection;
+use Palmyr\WebApp\Controller\BaseController;
+use Palmyr\WebApp\Http\Controller\RouteNotFoundController;
 use Palmyr\WebApp\Http\ControllerManager\ControllerFinder;
 use Palmyr\WebApp\Http\ControllerManager\ControllerFinderInterface;
 use Palmyr\WebApp\Http\ControllerManager\ControllerManager;
@@ -40,11 +42,18 @@ class Container implements ContainerInterface
 
     public function load(): ContainerInterface
     {
-
+        $this->services[BaseController::class] = new BaseController();
+        $this->services[RouteNotFoundController::class] = new RouteNotFoundController();
         $this->services[RouteLoaderInterface::class] = new RouteLoader($this->getParameter('root_dir'));
         $this->services[RenderInterface::class] = new Render($this->getParameter('root_dir'));
         $this->services[ControllerFinderInterface::class] = new ControllerFinder($this->get(RouteLoaderInterface::class));
-        $this->services[ControllerManagerInterface::class] = new ControllerManager($this->get(ControllerFinderInterface::class));
+        $this->services[ControllerManagerInterface::class] = new ControllerManager($this, $this->get(ControllerFinderInterface::class));
+
+        $servicesFile = $this->getParameter('root_dir') . DIRECTORY_SEPARATOR . 'config' . DIRECTORY_SEPARATOR . 'services.php';
+
+        if ( file_exists($servicesFile) ) {
+            require $servicesFile;
+        }
 
         return $this;
     }

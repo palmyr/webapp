@@ -3,6 +3,7 @@
 namespace Palmyr\WebApp\Http\ControllerManager;
 
 
+use Palmyr\WebApp\Container\ContainerInterface;
 use Palmyr\WebApp\Http\Controller\RouteNotFoundController;
 use Palmyr\WebApp\Http\Controller\ControllerInterface;
 use Palmyr\WebApp\Http\Request\RequestInterface;
@@ -10,12 +11,16 @@ use Palmyr\WebApp\Http\Request\RequestInterface;
 class ControllerManager implements ControllerManagerInterface
 {
 
+    protected ContainerInterface $container;
+
     protected ControllerFinderInterface $controllerFinder;
 
     public function __construct(
+        ContainerInterface $container,
         ControllerFinderInterface $controllerFinder
     )
     {
+        $this->container = $container;
         $this->controllerFinder = $controllerFinder;
     }
 
@@ -24,11 +29,10 @@ class ControllerManager implements ControllerManagerInterface
 
         $this->controllerFinder->loadRoutes();
 
-        if ( !$controller = $this->controllerFinder->getByPath($request->getPathInfo()) ) {
-            $controller = new RouteNotFoundController();
+        if ( !$controllerClass = $this->controllerFinder->getByPath($request->getPathInfo()) ) {
+            $controllerClass = RouteNotFoundController::class;
         }
 
-
-        return $controller;
+        return $this->container->get($controllerClass);
     }
 }

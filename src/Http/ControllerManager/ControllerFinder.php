@@ -27,11 +27,11 @@ class ControllerFinder implements ControllerFinderInterface
         }
     }
 
-    public function getByPath(string $basePath): ?ControllerInterface
+    public function getByPath(string $basePath): ?string
     {
         foreach ( $this->routes as $route => $class ) {
             if ( $route === $basePath ) {
-                return new $class();
+                return $class;
             }
         }
 

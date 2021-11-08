@@ -21,6 +21,7 @@ class RouteLoader implements RouteLoaderInterface
         $routes = [];
 
         $this->loadCoreRoutes($routes);
+        $this->loadApplicationRoutes($routes);
 
         return $routes;
     }
@@ -28,5 +29,10 @@ class RouteLoader implements RouteLoaderInterface
     protected function loadCoreRoutes(array &$routes): void
     {
         $routes['/'] = BaseController::class;
+    }
+
+    protected function loadApplicationRoutes(array &$routes): void
+    {
+        require $this->rootDirectory . DIRECTORY_SEPARATOR . 'config' . DIRECTORY_SEPARATOR . 'routes.php';
     }
 }

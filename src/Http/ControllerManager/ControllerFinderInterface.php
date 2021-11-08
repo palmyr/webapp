@@ -9,5 +9,5 @@ interface ControllerFinderInterface
 
     public function loadRoutes(): void;
 
-    public function getByPath(string $basePath): ?ControllerInterface;
+    public function getByPath(string $basePath): ?string;
 }

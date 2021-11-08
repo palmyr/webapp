@@ -2,8 +2,6 @@
 
 namespace Palmyr\WebApp\Http\Request;
 
-use JetBrains\PhpStorm\Pure;
-
 class Request implements RequestInterface
 {
 
