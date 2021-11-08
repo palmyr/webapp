@@ -2,12 +2,14 @@
 
 namespace Palmyr\WebApp\Container;
 
+use Palmyr\WebApp\Http\Request\RequestInterface;
+
 interface ContainerInterface
 {
 
     public static function init(): ContainerInterface;
 
-    public function load(): ContainerInterface;
+    public function load(RequestInterface $request): ContainerInterface;
 
     public function get(string $service): object;
 

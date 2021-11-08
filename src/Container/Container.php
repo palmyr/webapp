@@ -12,6 +12,7 @@ use Palmyr\WebApp\Http\ControllerManager\ControllerManager;
 use Palmyr\WebApp\Http\ControllerManager\ControllerManagerInterface;
 use Palmyr\WebApp\Http\Loader\RouteLoader;
 use Palmyr\WebApp\Http\Loader\RouteLoaderInterface;
+use Palmyr\WebApp\Http\Request\RequestInterface;
 use Palmyr\WebApp\Render\Render;
 use Palmyr\WebApp\Render\RenderInterface;
 
@@ -34,14 +35,16 @@ class Container implements ContainerInterface
     public static function init(): ContainerInterface
     {
         if ( !isset(static::$instance) ) {
-            static::$instance = new static(new ArrayCollection(['root_dir' => dirname(__FILE__, 3)]));
+            $container = static::$instance = new static(new ArrayCollection());
         }
 
         return static::$instance;
     }
 
-    public function load(): ContainerInterface
+    public function load(RequestInterface $request): ContainerInterface
     {
+        $this->setParameter('root_dir', $this->getRootDirectory($request));
+        $this->services[RequestInterface::class] = $request;
         $this->services[BaseController::class] = new BaseController();
         $this->services[RouteNotFoundController::class] = new RouteNotFoundController();
         $this->services[RouteLoaderInterface::class] = new RouteLoader($this->getParameter('root_dir'));
@@ -88,5 +91,10 @@ class Container implements ContainerInterface
         $this->parameters->set($parameter, $value);
 
         return $this;
+    }
+
+    protected function getRootDirectory(RequestInterface $request): string
+    {
+        return dirname($request->getServer()->get('SCRIPT_FILENAME'), 2);
     }
 }

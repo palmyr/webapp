@@ -26,8 +26,6 @@ class Kernel implements KernelInterface
     {
         if ( !isset(static::$instance) ) {
             static::$instance = new static(Container::init());
-
-            static::$instance->loadContainer();
         }
 
         return static::$instance;
@@ -35,6 +33,7 @@ class Kernel implements KernelInterface
 
     public function handle(RequestInterface $request): KernelInterface
     {
+        $this->loadContainer($request);
         /** @var ControllerManagerInterface $controllerManager */
         $controllerManager = $this->container->get(ControllerManagerInterface::class);
 
@@ -58,8 +57,8 @@ class Kernel implements KernelInterface
 
     }
 
-    protected function loadContainer(): void
+    protected function loadContainer(RequestInterface $request): void
     {
-        $this->container->load();
+        $this->container->load($request);
     }
 }

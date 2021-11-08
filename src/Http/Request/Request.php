@@ -2,13 +2,16 @@
 
 namespace Palmyr\WebApp\Http\Request;
 
+use Palmyr\CommonUtils\Collection\ArrayCollection;
+use Palmyr\CommonUtils\Collection\Collection;
+
 class Request implements RequestInterface
 {
 
-    protected array $server;
+    protected Collection $server;
 
     public function __construct(
-        array $server
+        Collection $server
     )
     {
         $this->server = $server;
@@ -16,7 +19,9 @@ class Request implements RequestInterface
 
     public static function createFromGlobals(): RequestInterface
     {
-        return new static($_SERVER);
+        return new static(
+            new ArrayCollection($_SERVER)
+        );
     }
 
     public function getMethod(): string
@@ -58,5 +63,10 @@ class Request implements RequestInterface
     public function getDocumentRoot(): string
     {
         return $this->server['DOCUMENT_ROOT'];
+    }
+
+    public function getServer(): Collection
+    {
+        return $this->server;
     }
 }

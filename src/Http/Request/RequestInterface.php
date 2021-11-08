@@ -2,6 +2,8 @@
 
 namespace Palmyr\WebApp\Http\Request;
 
+use Palmyr\CommonUtils\Collection\Collection;
+
 interface RequestInterface
 {
 
@@ -14,4 +16,6 @@ interface RequestInterface
     public function getPathInfo(): string;
 
     public function getDocumentRoot(): string;
+
+    public function getServer(): Collection;
 }
