@@ -7,38 +7,77 @@ use Composer\Script\Event;
 class InstallScript
 {
 
+    static protected self $instance;
+
+    protected string $rootDirectory;
+
+    protected string $templateDirectory;
+
+    protected function __construct(
+        string $rootDirectory
+    )
+    {
+        $this->rootDirectory = $rootDirectory;
+        $this->templateDirectory = dirname(__DIR__, 2) . DIRECTORY_SEPARATOR . 'Resources' . DIRECTORY_SEPARATOR . 'templates';
+    }
+
     static public function install(Event $event): void
     {
-        $rootDir = dirname($event->getComposer()->getConfig()->get('vendor-dir'));
-        static::setupPublicDir($rootDir);
+        static::init($event);
     }
 
     static public function update(Event $event): void
     {
-        $rootDir = dirname($event->getComposer()->getConfig()->get('vendor-dir'));
-        static::setupPublicDir($rootDir);
+        static::init($event);
     }
 
-    static protected function setupPublicDir(string $rootDir): void
+    static protected function init(Event $event): void
     {
-        $publicDir = $rootDir . DIRECTORY_SEPARATOR . 'public';
-        $indexTemplate = dirname(__DIR__) . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'Resources' . DIRECTORY_SEPARATOR . 'templates' . DIRECTORY_SEPARATOR . 'index.php.txt';
-        $htaccessTemplate = dirname(__DIR__) . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'Resources' . DIRECTORY_SEPARATOR . 'templates' . DIRECTORY_SEPARATOR . 'htaccess.txt';
+        if ( !isset(static::$instance) ) {
+            $rootDir = dirname($event->getComposer()->getConfig()->get('vendor-dir'));
+            static::$instance = new static($rootDir);
+        }
 
-        if ( !is_dir($publicDir) ) {
-            if ( !mkdir($publicDir) ) {
-                throw new \RuntimeException('Failed to create public directory');
+        static::$instance->setupApplication();
+
+    }
+
+    protected function setupApplication(): void
+    {
+
+        foreach ($this->applicationDirectories() as $directory ) {
+            $directory = $this->rootDirectory . $directory;
+            if ( !is_dir($directory) ) {
+                if ( !mkdir($directory) ) {
+                    throw new \RuntimeException(sprintf('Failed to create application directory [Directory: %s ]', $directory));
+                }
             }
         }
 
+        foreach ( $this->applicationTemplates() as $template => $destination ) {
+            $template = $this->templateDirectory . $template;
+            $destination = $this->rootDirectory . $destination;
 
-        if ( !copy($indexTemplate, $publicDir . DIRECTORY_SEPARATOR . 'index.php') ) {
-            throw new \RuntimeException('Failed to create index.php');
+            if ( !copy($template, $destination) ) {
+                throw new \RuntimeException(sprintf('Failed to copy template [Template: %s ] [Destination: %s ]', $template, $destination));
+            }
         }
+    }
 
-        if ( !copy($htaccessTemplate, $publicDir . DIRECTORY_SEPARATOR . '.htaccess') ) {
-            throw new \RuntimeException('Failed to create index.php');
-        }
+    protected function applicationDirectories(): array
+    {
+        return [
+            DIRECTORY_SEPARATOR . 'public',
+            DIRECTORY_SEPARATOR . 'config',
+        ];
+    }
+
+    protected function applicationTemplates(): array
+    {
+        return [
+            '/htaccess.txt' => '/public/.htaccess',
+            '/index.php.txt' => '/public/index.php',
+        ];
     }
 
 
