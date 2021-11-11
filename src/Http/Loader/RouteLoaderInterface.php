@@ -2,8 +2,10 @@
 
 namespace Palmyr\WebApp\Http\Loader;
 
-interface RouteLoaderInterface
+use Palmyr\WebApp\Configuration\Loader\ConfigurationLoaderInterface;
+
+interface RouteLoaderInterface extends ConfigurationLoaderInterface
 {
 
-    public function load(): array;
+    public function addRoute(string $route, string $className): RouteLoaderInterface;
 }

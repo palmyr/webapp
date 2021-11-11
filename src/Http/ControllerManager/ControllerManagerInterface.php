@@ -3,10 +3,13 @@
 namespace Palmyr\WebApp\Http\ControllerManager;
 
 use Palmyr\WebApp\Http\Controller\ControllerInterface;
+use Palmyr\WebApp\Http\Loader\RouteLoaderInterface;
 use Palmyr\WebApp\Http\Request\RequestInterface;
 
 interface ControllerManagerInterface
 {
 
     public function getController(RequestInterface $request): ControllerInterface;
+
+    public function addLoader(RouteLoaderInterface $loader): ControllerManagerInterface;
 }

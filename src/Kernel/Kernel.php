@@ -54,7 +54,7 @@ class Kernel implements KernelInterface
 
     public function close(): void
     {
-
+        unset($this->container);
     }
 
     protected function loadContainer(RequestInterface $request): void

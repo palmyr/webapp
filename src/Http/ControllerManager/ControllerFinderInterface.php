@@ -2,12 +2,10 @@
 
 namespace Palmyr\WebApp\Http\ControllerManager;
 
-use Palmyr\WebApp\Http\Controller\ControllerInterface;
-
 interface ControllerFinderInterface
 {
 
-    public function loadRoutes(): void;
+    public function addRoute(string $route, string $className): ControllerFinderInterface;
 
-    public function getByPath(string $basePath): ?string;
+    public function getByPath(string $basePath): ?array;
 }

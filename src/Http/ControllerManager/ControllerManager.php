@@ -6,6 +6,7 @@ namespace Palmyr\WebApp\Http\ControllerManager;
 use Palmyr\WebApp\Container\ContainerInterface;
 use Palmyr\WebApp\Http\Controller\RouteNotFoundController;
 use Palmyr\WebApp\Http\Controller\ControllerInterface;
+use Palmyr\WebApp\Http\Loader\RouteLoaderInterface;
 use Palmyr\WebApp\Http\Request\RequestInterface;
 
 class ControllerManager implements ControllerManagerInterface
@@ -27,12 +28,20 @@ class ControllerManager implements ControllerManagerInterface
     public function getController(RequestInterface $request): ControllerInterface
     {
 
-        $this->controllerFinder->loadRoutes();
-
-        if ( !$controllerClass = $this->controllerFinder->getByPath($request->getPathInfo()) ) {
+        if ( $params = $this->controllerFinder->getByPath($request->getPathInfo())) {
+            $controllerClass = $params['class'];
+            $request->attributes->add($params['arguments']);
+        } else {
             $controllerClass = RouteNotFoundController::class;
         }
 
         return $this->container->get($controllerClass);
+    }
+
+    public function addLoader(RouteLoaderInterface $loader): ControllerManagerInterface
+    {
+        $this->loaders[] = $loader;
+
+        return $this;
     }
 }

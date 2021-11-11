@@ -8,19 +8,24 @@ use Palmyr\CommonUtils\Collection\Collection;
 class Request implements RequestInterface
 {
 
-    protected Collection $server;
+    public Collection $server;
+
+    public Collection $attributes;
 
     public function __construct(
-        Collection $server
+        Collection $server,
+        Collection $attributes
     )
     {
         $this->server = $server;
+        $this->attributes = $attributes;
     }
 
     public static function createFromGlobals(): RequestInterface
     {
         return new static(
-            new ArrayCollection($_SERVER)
+            new ArrayCollection($_SERVER),
+            new ArrayCollection([])
         );
     }
 

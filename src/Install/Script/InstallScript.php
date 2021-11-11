@@ -48,7 +48,7 @@ class InstallScript
         foreach ($this->applicationDirectories() as $directory ) {
             $directory = $this->rootDirectory . $directory;
             if ( !is_dir($directory) ) {
-                if ( !mkdir($directory) ) {
+                if ( !mkdir($directory, 0777, true) ) {
                     throw new \RuntimeException(sprintf('Failed to create application directory [Directory: %s ]', $directory));
                 }
             }
@@ -69,6 +69,7 @@ class InstallScript
         return [
             DIRECTORY_SEPARATOR . 'public',
             DIRECTORY_SEPARATOR . 'config',
+            DIRECTORY_SEPARATOR . 'var' . DIRECTORY_SEPARATOR . 'log',
         ];
     }
 
