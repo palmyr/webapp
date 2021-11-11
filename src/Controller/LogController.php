@@ -4,6 +4,7 @@ namespace Palmyr\WebApp\Controller;
 
 use Palmyr\WebApp\Http\Controller\AbstractController;
 use Palmyr\WebApp\Http\Request\RequestInterface;
+use Palmyr\WebApp\Http\Response\JsonResponse;
 use Palmyr\WebApp\Http\Response\Response;
 use Palmyr\WebApp\Http\Response\ResponseInterface;
 
@@ -35,6 +36,8 @@ class LogController extends AbstractController
 
         fclose($file);
 
-        return new Response('Data logged!!!');
+        return new JsonResponse([
+            'message' => 'Data logged!',
+        ]);
     }
 }
