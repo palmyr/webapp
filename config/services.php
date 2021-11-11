@@ -4,7 +4,7 @@ use Palmyr\WebApp\Controller\BaseController;
 use Palmyr\WebApp\Controller\LogController;
 use Palmyr\WebApp\FileSystem\FileSystem;
 use Palmyr\WebApp\FileSystem\FileSystemInterface;
-use Palmyr\WebApp\Http\Controller\RouteNotFoundController;
+use Palmyr\WebApp\Controller\RouteNotFoundController;
 use Palmyr\WebApp\Http\ControllerManager\ControllerFinder;
 use Palmyr\WebApp\Http\ControllerManager\ControllerFinderInterface;
 use Palmyr\WebApp\Http\ControllerManager\ControllerManager;

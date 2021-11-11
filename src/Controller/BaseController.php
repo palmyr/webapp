@@ -12,7 +12,7 @@ class BaseController extends AbstractController
 
     public function get(RequestInterface $request): ResponseInterface
     {
-        $content = $this->render->render('base');
+        $content = $this->render->render('base.template.php');
         return new Response($content);
     }
 }

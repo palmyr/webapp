@@ -4,7 +4,7 @@ namespace Palmyr\WebApp\Http\ControllerManager;
 
 
 use Palmyr\WebApp\Container\ContainerInterface;
-use Palmyr\WebApp\Http\Controller\RouteNotFoundController;
+use Palmyr\WebApp\Controller\RouteNotFoundController;
 use Palmyr\WebApp\Http\Controller\ControllerInterface;
 use Palmyr\WebApp\Http\Loader\RouteLoaderInterface;
 use Palmyr\WebApp\Http\Request\RequestInterface;
