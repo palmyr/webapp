@@ -17,6 +17,7 @@ use Palmyr\WebApp\Http\Loader\PHPFileRouteLoader;
 use Palmyr\WebApp\Http\Loader\RouteLoader;
 use Palmyr\WebApp\Http\Loader\RouteLoaderInterface;
 use Palmyr\WebApp\Http\Request\RequestInterface;
+use Palmyr\WebApp\Render\Loader\TemplateDirectoryLoader;
 use Palmyr\WebApp\Render\Render;
 use Palmyr\WebApp\Render\RenderInterface;
 
@@ -24,6 +25,8 @@ class Container implements ContainerInterface
 {
 
     static protected ContainerInterface $instance;
+
+    protected string $rootDirectory;
 
     protected array $services = [];
 
@@ -39,7 +42,7 @@ class Container implements ContainerInterface
     public static function init(): ContainerInterface
     {
         if ( !isset(static::$instance) ) {
-            $container = static::$instance = new static(new ArrayCollection());
+            static::$instance = new static(new ArrayCollection());
         }
 
         return static::$instance;
@@ -47,24 +50,40 @@ class Container implements ContainerInterface
 
     public function load(RequestInterface $request): ContainerInterface
     {
-        $this->setParameter('root_dir', $this->getRootDirectory($request));
         $this->services[RequestInterface::class] = $request;
-        $this->services[BaseController::class] = new BaseController();
-        $this->services[LogController::class] = new LogController($this->getParameter('root_dir'));
-        $this->services[RouteNotFoundController::class] = new RouteNotFoundController();
-        $this->services[RenderInterface::class] = new Render($this->getParameter('root_dir'));
-        $this->services[ControllerFinderInterface::class] = (new ControllerFinder());
-        $this->services[FileSystemInterface::class] = new FileSystem();
-        $this->services[ControllerManagerInterface::class] = new ControllerManager($this, $this->get(ControllerFinderInterface::class));
+        $this->setParameter('root_dir', $this->getRootDirectory());
+
+        $coreServicesFile = dirname(__DIR__, 2) . DIRECTORY_SEPARATOR . 'config' . DIRECTORY_SEPARATOR . 'services.php';
+
+        require $coreServicesFile;
+
+        /** @var FileSystemInterface $fileSystem */
+        $fileSystem = $this->get(FileSystemInterface::class);
 
         $routeLoader = new PHPFileRouteLoader($this);
-
         $routeLoader->load(dirname(__DIR__, 1) . DIRECTORY_SEPARATOR . 'Resources' . DIRECTORY_SEPARATOR . 'routes' . DIRECTORY_SEPARATOR . 'routes.php');
 
-        $servicesFile = $this->getParameter('root_dir') . DIRECTORY_SEPARATOR . 'config' . DIRECTORY_SEPARATOR . 'services.php';
+        $applicationRoutesFile = $this->getRootDirectory() . DIRECTORY_SEPARATOR . 'Resources' . DIRECTORY_SEPARATOR . 'routes' . DIRECTORY_SEPARATOR . 'routes.php';
 
-        if ( file_exists($servicesFile) ) {
-            require $servicesFile;
+        if ( $fileSystem->isFile($applicationRoutesFile) ) {
+            $routeLoader->load($applicationRoutesFile);
+        }
+
+        $templateLoader = new TemplateDirectoryLoader($this);
+
+        $templateLoader->load(dirname(__DIR__, 1) . DIRECTORY_SEPARATOR . 'Resources' . DIRECTORY_SEPARATOR . 'html');
+
+        $applicationTemplates = $this->getRootDirectory() . DIRECTORY_SEPARATOR . 'Resources' . DIRECTORY_SEPARATOR . 'html';
+
+        if ( $fileSystem->isFile($applicationTemplates) ) {
+            $templateLoader->load($applicationTemplates);
+        }
+
+
+        $applicationServicesFile = $this->getRootDirectory() . DIRECTORY_SEPARATOR . 'config' . DIRECTORY_SEPARATOR . 'services.php';
+
+        if ( file_exists($applicationServicesFile) && $coreServicesFile !== $applicationServicesFile ) {
+            require $applicationServicesFile;
         }
 
         return $this;
@@ -102,8 +121,16 @@ class Container implements ContainerInterface
         return $this;
     }
 
-    protected function getRootDirectory(RequestInterface $request): string
+    protected function prepareRootDirectory(RequestInterface $request): void
     {
-        return dirname($request->getServer()->get('SCRIPT_FILENAME'), 2);
+        if ( !isset($this->rootDirectory) ) {
+            $this->rootDirectory = dirname($request->getServer()->get('SCRIPT_FILENAME'), 2);
+        }
+    }
+
+    protected function getRootDirectory(): string
+    {
+        $this->prepareRootDirectory($this->get(RequestInterface::class));
+        return $this->rootDirectory;
     }
 }

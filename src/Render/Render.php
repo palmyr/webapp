@@ -7,13 +7,11 @@ class Render implements RenderInterface
 
     protected array $templates;
 
-    public function __construct(
-        string $rootDir
-    )
+    public function addTemplate(string $name, string $path): RenderInterface
     {
-        $this->templates = [
-            'base' => $rootDir . '/src/Resources/html/base.php',
-        ];
+        $this->templates[$name] = $path;
+
+        return $this;
     }
 
     public function render(string $template, array $variables = []): string

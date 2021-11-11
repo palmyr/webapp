@@ -5,6 +5,6 @@ namespace Palmyr\WebApp\Configuration\Loader;
 interface ConfigurationLoaderInterface
 {
 
-    public function load(string $config): array;
+    public function load(string $config): void;
 
 }

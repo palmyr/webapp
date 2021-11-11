@@ -11,7 +11,7 @@ class PHPFileRouteLoader extends AbstractRouteLoader
 
     use FileConfigurationLoaderTrait;
 
-    public function load(string $config): array
+    public function load(string $config): void
     {
         if ( !$this->getFileSystem()->exists($config) ) {
             throw new ConfigurationException('Failed to locate configuration');
@@ -22,7 +22,5 @@ class PHPFileRouteLoader extends AbstractRouteLoader
         foreach ( $data['routes'] as $route => $className ) {
             $this->addRoute($route, $className);
         }
-
-        return [];
     }
 }
